@@ -1,0 +1,159 @@
+import random
+
+listDoors = []
+doorChoice = 0
+firstGoat = 0
+secondGoat = 0
+doorRevealed = 0
+keepWin = 0
+switchWin = 0
+
+
+
+def SetUp():
+    global listDoors
+    global doorChoice 
+    global firstGoat 
+    global secondGoat 
+    global doorRevealed 
+    global keepWin 
+    global switchWin 
+    
+    listDoors = ["goat", "goat", "goat"]
+    carDoor = random.randint(0,2)
+    listDoors[carDoor] = "car"
+
+    ##print(listDoors)
+
+    firstGoat = listDoors.index("goat")
+    secondGoat = listDoors.index("goat", firstGoat+1)
+
+    ##print(firstGoat, secondGoat)
+
+
+    doorChoice = random.randint(0,2)
+    ##print("You have chosen door number ", doorChoice + 1)
+
+    return listDoors, firstGoat, secondGoat, doorChoice
+
+
+def RevealDoor(doors, chosenDoor, goat1, goat2):
+    global listDoors
+    global doorChoice 
+    global firstGoat 
+    global secondGoat 
+    global doorRevealed 
+    global keepWin 
+    global switchWin
+    if chosenDoor == 0:
+        if chosenDoor == "car":
+            revealedDoor = random.choice(1,2)
+            ##print("Behind door number ", revealedDoor + 1, " is a " + doors[revealedDoor])
+        else:
+            if chosenDoor == goat1:
+                revealedDoor = goat2
+            else:
+                revealedDoor = goat1
+            ##print("Behind door number ", revealedDoor + 1, " is a " + doors[revealedDoor])        
+    elif chosenDoor == 1:
+        if chosenDoor == "car":
+            revealedDoor = random.choice(0,2)
+            ##print("Behind door number ", revealedDoor + 1, " is a " + doors[revealedDoor])
+        else:
+            if chosenDoor == goat1:
+                revealedDoor = goat2
+            else:
+                revealedDoor = goat1
+            ##print("Behind door number ", revealedDoor + 1, " is a " + doors[revealedDoor]) 
+    else:
+        if chosenDoor == "car":
+            revealedDoor = random.choice(0,1)
+            ##print("Behind door number ", revealedDoor + 1, " is a " + doors[revealedDoor])
+        else:
+            if chosenDoor == goat1:
+                revealedDoor = goat2
+            else:
+                revealedDoor = goat1
+            ##print("Behind door number ", revealedDoor + 1, " is a " + doors[revealedDoor])
+
+
+def KeepDoor(doors, chosenDoor):
+    global listDoors
+    global doorChoice 
+    global firstGoat 
+    global secondGoat 
+    global doorRevealed 
+    global keepWin 
+    global switchWin
+    ##print("You keep your door...")
+    ##print("Behind your door is a ", doors[chosenDoor])
+    if doors[chosenDoor] == "car":
+        keepWin += 1
+
+
+def SwitchDoor(doors, chosenDoor, revealedDoor):
+    global listDoors
+    global doorChoice 
+    global firstGoat 
+    global secondGoat 
+    global doorRevealed 
+    global keepWin 
+    global switchWin
+    if chosenDoor == 0:
+        if revealedDoor == 1:
+            chosenDoor == 2
+        else:
+            chosenDoor == 1
+    elif chosenDoor == 1:
+        if revealedDoor == 0:
+            chosenDoor = 2
+        else:
+            chosenDoor = 1
+    else:
+        if revealedDoor == 0:
+            chosenDoor = 1
+        else:
+            chosenDoor = 0
+    ##print("You swap doors...")
+    ##print("Behind your door is a", doors[chosenDoor])
+    if doors[chosenDoor] == "car":
+        switchWin += 1
+
+
+def RunSimulation():
+    global doors
+    global chosenDoor 
+    global goat1 
+    global goat2 
+    global revealedDoor 
+    global keepWin 
+    global keepWin
+    
+    for i in range(1000):
+        SetUp()
+        RevealDoor(listDoors, doorChoice, firstGoat, secondGoat)
+        KeepDoor(listDoors, doorChoice)
+        ##print(keepWin)
+        ##print("\n")
+
+    for x in range(1000):
+        SetUp()
+        RevealDoor(listDoors, doorChoice, firstGoat, secondGoat)
+        SwitchDoor(listDoors, doorChoice, doorRevealed)
+        ##print(switchWin)
+        ##print("\n")
+
+    print("Keeping your original door:")
+    keepPercent = (keepWin/1000)*100
+    print("You won" , keepWin , " times out of 1000 - ", round(keepPercent, 1))
+
+    print("\n")
+
+    print("Switching your door:")
+    switchPercent = (switchWin/1000)*100
+    print("You won" , switchWin  ," times out of 1000 - ", round(switchPercent,1))
+    
+            
+
+            
+RunSimulation()
